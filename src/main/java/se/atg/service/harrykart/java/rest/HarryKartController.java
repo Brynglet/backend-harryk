@@ -1,7 +1,9 @@
 package se.atg.service.harrykart.java.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,10 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/java/api")
 public class HarryKartController {
 
+    @Autowired
+    private HarryKartService harryKartService;
+
     @PostMapping(path = "/play", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String playHarryKart() {
+    public String playHarryKart(@RequestBody String inputStr) {
+
+        harryKartService.getInfo(inputStr);
+
         return """
-                { "message": "Don't know how to play yet" }
+                { "message": "Don't know how2 to play yet" }
                 """;
     }
 

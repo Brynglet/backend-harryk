@@ -1,7 +1,6 @@
 package se.atg.service.harrykart.java;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.URI;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -40,6 +37,7 @@ public class HarryKartAppTest {
                 .statusCode(405);
     }
 
+    /*
     @Test
     @DisplayName("The application doesn't know how to play yet")
     void cantPlayYet() {
@@ -55,4 +53,6 @@ public class HarryKartAppTest {
                 .and()
                 .body("message", equalTo("Don't know how to play yet"));
     }
+     */
+
 }

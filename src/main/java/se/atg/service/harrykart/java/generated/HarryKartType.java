@@ -1,11 +1,9 @@
 
 package se.atg.service.harrykart.java.generated;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.math.BigInteger;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
@@ -29,6 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  * 
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "harryKartType", propOrder = {
     "numberOfLoops",

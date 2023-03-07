@@ -8,15 +8,31 @@ import org.springframework.stereotype.Service;
 import se.atg.service.harrykart.java.generated.HarryKartType;
 
 import java.io.StringReader;
+import java.util.Arrays;
 
 @Service
-public class HarryKartServiceImpl implements  HarryKartService{
+public class HarryKartServiceImpl implements  HarryKartService {
 
     @Override
-    public String getInfo(String inputStr) {
-
+    public HarryResp getInfo(String inputStr) {
         JAXBElement<HarryKartType> transformed = transform(inputStr);
-        return "ok!";
+
+        PositionHorse positionHorse1 = new PositionHorse();
+        positionHorse1.setPosition(1);
+        positionHorse1.setHorse("name1");
+
+        PositionHorse positionHorse2 = new PositionHorse();
+        positionHorse2.setPosition(2);
+        positionHorse2.setHorse("name2");
+
+        PositionHorse positionHorse3 = new PositionHorse();
+        positionHorse3.setPosition(3);
+        positionHorse3.setHorse("name3");
+
+        HarryResp harryResp = new HarryResp();
+        harryResp.setRanking(Arrays.asList(positionHorse1, positionHorse2, positionHorse3));
+
+        return harryResp;
     }
 
     @SuppressWarnings("unchecked")

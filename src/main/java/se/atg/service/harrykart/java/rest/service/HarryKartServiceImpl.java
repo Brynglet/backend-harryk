@@ -90,13 +90,13 @@ public class HarryKartServiceImpl implements HarryKartService {
         return totalTime;
     }
 
-    private Double getLapSpeed(Double currentSpeed, Double bumpUpSpeed) {
+    private Double getLapSpeed(Double currentSpeed, Double extraSpeed) {
 
-        double lapSpeed = currentSpeed + bumpUpSpeed;
+        double lapSpeed = currentSpeed + extraSpeed;
 
         if (lapSpeed <= 0) {
-            log.error(ZonedDateTime.now() + ". getLapSpeed exception lapSpeed <= 0.");
-            throw new RuntimeException("getLapSpeed lapSpeed <= 0.");
+            log.error(ZonedDateTime.now() + ". getLapSpeed exception lapSpeed <= 0 :" + lapSpeed);
+            throw new RuntimeException("getLapSpeed exception lapSpeed <= 0 :" + lapSpeed);
         }
 
         return lapSpeed;

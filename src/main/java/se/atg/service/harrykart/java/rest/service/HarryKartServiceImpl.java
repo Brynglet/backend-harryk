@@ -7,7 +7,7 @@ import jakarta.xml.bind.Unmarshaller;
 import org.springframework.stereotype.Service;
 import se.atg.service.harrykart.java.generated.HarryKartType;
 import se.atg.service.harrykart.java.generated.ParticipantType;
-import se.atg.service.harrykart.java.rest.pojo.HarryResp;
+import se.atg.service.harrykart.java.rest.pojo.HarryResponse;
 import se.atg.service.harrykart.java.rest.pojo.HorseDTO;
 import se.atg.service.harrykart.java.rest.pojo.PositionHorse;
 
@@ -24,7 +24,7 @@ public class HarryKartServiceImpl implements HarryKartService {
     private static final int MEDAL_FINISHERS = 3;
 
     @Override
-    public HarryResp getResponse(String xmlStr) {
+    public HarryResponse getResponse(String xmlStr) {
 
         JAXBElement<HarryKartType> xmlAsJava = transformXmlToJAXBElement(xmlStr);
 
@@ -39,7 +39,7 @@ public class HarryKartServiceImpl implements HarryKartService {
         return convertToResponse(horseDTOs);
     }
 
-    private HarryResp convertToResponse(List<HorseDTO> horseDTOs) {
+    private HarryResponse convertToResponse(List<HorseDTO> horseDTOs) {
 
         AtomicInteger pos = new AtomicInteger();
         pos.set(0);
@@ -53,14 +53,14 @@ public class HarryKartServiceImpl implements HarryKartService {
                             .build())
                 .collect(Collectors.toList());
 
-        return HarryResp.builder()
+        return HarryResponse.builder()
                 .ranking(responseInfo)
                 .build();
     }
 
     private HorseDTO getHorseDto(ParticipantType x, HarryKartType hkt) {
 
-        Double totalTime = getTotalTime(x, hkt);
+        Double totalTime = getTotalRaceTime(x, hkt);
 
         return HorseDTO.builder()
                 .horseName(x.getName())
@@ -69,7 +69,7 @@ public class HarryKartServiceImpl implements HarryKartService {
                 .build();
     }
 
-    private Double getTotalTime(ParticipantType participantType, HarryKartType hkt) {
+    private Double getTotalRaceTime(ParticipantType participantType, HarryKartType hkt) {
 
         int laneNr = participantType.getLane().intValue();
 

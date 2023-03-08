@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Builder
-public class HarryResp implements Serializable {
+public class HarryResponse implements Serializable {
     private static final long serialVersionUID = -3045816128915845702L;
 
     private List<PositionHorse> ranking;

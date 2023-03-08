@@ -37,22 +37,4 @@ public class HarryKartAppTest {
                 .statusCode(405);
     }
 
-    /*
-    @Test
-    @DisplayName("The application doesn't know how to play yet")
-    void cantPlayYet() {
-        given()
-                .header("Content-Type", ContentType.XML)
-        .when()
-                .post(harryKartApp)
-        .then()
-                .assertThat()
-                .statusCode(200)
-                .and()
-                .header("Content-Type", ContentType.JSON.toString())
-                .and()
-                .body("message", equalTo("Don't know how to play yet"));
-    }
-     */
-
 }

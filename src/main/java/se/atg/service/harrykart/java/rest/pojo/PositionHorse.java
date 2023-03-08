@@ -3,7 +3,9 @@ package se.atg.service.harrykart.java.rest.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
+import lombok.Data;
 
+@Data
 @Builder
 public class PositionHorse {
 
@@ -14,28 +16,4 @@ public class PositionHorse {
     @JsonIgnore
     /* For testing purposes */
     private Double totalTime;
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public String getHorse() {
-        return horse;
-    }
-
-    public void setHorse(String horse) {
-        this.horse = horse;
-    }
-
-    public Double getTotalTime() {
-        return totalTime;
-    }
-
-    public void setTotalTime(Double totalTime) {
-        this.totalTime = totalTime;
-    }
 }

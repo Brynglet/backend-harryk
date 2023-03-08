@@ -1,10 +1,17 @@
 package se.atg.service.harrykart.java.rest;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PositionHorse {
 
     private int position;
 
     private String horse;
+
+    @JsonIgnore
+    /* For testing purposes */
+    private Double totalTime;
 
     public int getPosition() {
         return position;
@@ -20,5 +27,13 @@ public class PositionHorse {
 
     public void setHorse(String horse) {
         this.horse = horse;
+    }
+
+    public Double getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(Double totalTime) {
+        this.totalTime = totalTime;
     }
 }

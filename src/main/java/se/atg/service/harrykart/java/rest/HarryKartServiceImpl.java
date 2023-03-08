@@ -48,10 +48,9 @@ public class HarryKartServiceImpl implements HarryKartService {
             positionHorses.add(positionHorse);
         }
 
-        HarryResp harryResp = new HarryResp();
-        harryResp.setRanking(positionHorses);
-
-        return  harryResp;
+        return HarryResp.builder()
+                .ranking(positionHorses)
+                .build();
     }
 
     private HorseDTO getHorseDto(ParticipantType x, HarryKartType hkt) {

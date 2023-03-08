@@ -33,7 +33,7 @@ public class HarryKartServiceImpl implements HarryKartService {
         List<HorseDTO> horseDTOs = harryKartType.getStartList().getParticipant().stream()
                 .map(x -> getHorseDto(x, harryKartType))
                 .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
-                .limit(MEDAL_FINISHERS)
+                .limit(NR_OF_MEDAL_FINISHERS)
                 .collect(Collectors.toList());
 
         return convertToResponse(horseDTOs);

@@ -19,13 +19,9 @@ public class HarryKartController {
     @PostMapping(path = "/play", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MappingJacksonValue> playHarryKart(@RequestBody String inputStr) {
 
-        HarryResp aa = harryKartService.getInfo(inputStr);
+        var harryResp = harryKartService.getInfo(inputStr);
 
-        MappingJacksonValue mjv = new MappingJacksonValue(aa);
-        return ResponseEntity.ok(mjv);
-       // return """
-        //        { "message": "Don't know how2 to play yet" }
-         //       """;
+        return ResponseEntity.ok(new MappingJacksonValue(harryResp));
     }
 
 }

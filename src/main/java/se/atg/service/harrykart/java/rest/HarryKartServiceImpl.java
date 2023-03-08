@@ -10,8 +10,8 @@ import se.atg.service.harrykart.java.generated.ParticipantType;
 
 import java.io.StringReader;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,14 +21,14 @@ public class HarryKartServiceImpl implements HarryKartService {
     private static final int MEDAL_FINISHERS = 3;
 
     @Override
-    public HarryResp getInfo(String inputStr) {
+    public HarryResp getInfo(String xmlStr) {
 
-        JAXBElement<HarryKartType> jtransformed = transform(inputStr);
+        JAXBElement<HarryKartType> xmlAsJava = transformXmlToJAXBElement(xmlStr);
 
-        HarryKartType hkt = jtransformed.getValue();
+        var harryKartType = xmlAsJava.getValue();
 
-        List<HorseDTO> horseDTOs = hkt.getStartList().getParticipant().stream()
-                .map(x -> getHorseDto(x, hkt))
+        List<HorseDTO> horseDTOs = harryKartType.getStartList().getParticipant().stream()
+                .map(x -> getHorseDto(x, harryKartType))
                 .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
                 .limit(MEDAL_FINISHERS)
                 .collect(Collectors.toList());
@@ -38,15 +38,17 @@ public class HarryKartServiceImpl implements HarryKartService {
 
     private HarryResp convertToResponse(List<HorseDTO> horseDTOs) {
 
-        List<PositionHorse> positionHorses = new ArrayList<>();
+        AtomicInteger pos = new AtomicInteger();
+        pos.set(0);
 
-        for (int k = 0; k < horseDTOs.size(); k++) {
-            var positionHorse = new PositionHorse();
-            positionHorse.setHorse(horseDTOs.get(k).getHorseName());
-            positionHorse.setPosition(k + 1);
-
-            positionHorses.add(positionHorse);
-        }
+        List<PositionHorse> positionHorses = horseDTOs.stream()
+                .map(x -> PositionHorse.builder()
+                            .horse(x.getHorseName())
+                            .position(pos.incrementAndGet())
+                            .totalTime(x.getTotalTime())
+                            .build())
+                .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
+                .collect(Collectors.toList());
 
         return HarryResp.builder()
                 .ranking(positionHorses)
@@ -55,14 +57,13 @@ public class HarryKartServiceImpl implements HarryKartService {
 
     private HorseDTO getHorseDto(ParticipantType x, HarryKartType hkt) {
 
-        HorseDTO horseDTO = new HorseDTO();
-
-        horseDTO.setHorseName(x.getName());
-        horseDTO.setLaneNr(x.getLane());
         Double totalTime = getTotalTime(x, hkt);
-        horseDTO.setTotalTime(totalTime);
 
-        return horseDTO;
+        return HorseDTO.builder()
+                .horseName(x.getName())
+                .laneNr(x.getLane())
+                .totalTime(totalTime)
+                .build();
     }
 
     private Double getTotalTime(ParticipantType participantType, HarryKartType hkt) {
@@ -88,19 +89,18 @@ public class HarryKartServiceImpl implements HarryKartService {
     }
 
     @SuppressWarnings("unchecked")
-    private JAXBElement<HarryKartType> transform(String xmlString) {
+    private JAXBElement<HarryKartType> transformXmlToJAXBElement(String xmlString) {
 
-        JAXBElement<HarryKartType> jhkt = null;
         try {
+
             JAXBContext jc = JAXBContext.newInstance("se.atg.service.harrykart.java.generated");
             Unmarshaller um = jc.createUnmarshaller();
-            jhkt = (JAXBElement<HarryKartType>) um.unmarshal(new StringReader(xmlString));
-            int k = 1;
+
+            return (JAXBElement<HarryKartType>) um.unmarshal(new StringReader(xmlString));
 
         } catch (JAXBException e) {
             e.printStackTrace();
+            throw new RuntimeException("");
         }
-
-        return jhkt;
     }
 }

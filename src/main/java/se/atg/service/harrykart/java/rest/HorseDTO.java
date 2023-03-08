@@ -1,7 +1,10 @@
 package se.atg.service.harrykart.java.rest;
 
+import lombok.Builder;
+
 import java.math.BigInteger;
 
+@Builder
 public class HorseDTO {
 
     private String horseName;

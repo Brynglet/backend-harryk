@@ -2,7 +2,9 @@ package se.atg.service.harrykart.java.rest;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 
+@Builder
 public class PositionHorse {
 
     private int position;

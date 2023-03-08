@@ -1,32 +1,35 @@
 package se.atg.service.harrykart.java.rest.service;
 
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.atg.service.harrykart.java.generated.HarryKartType;
 import se.atg.service.harrykart.java.generated.ParticipantType;
 import se.atg.service.harrykart.java.rest.pojo.HarryResponse;
 import se.atg.service.harrykart.java.rest.pojo.HorseDTO;
 import se.atg.service.harrykart.java.rest.pojo.PositionHorse;
+import se.atg.service.harrykart.java.rest.utility.XmlConverter;
 
-import java.io.StringReader;
 import java.math.BigInteger;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static se.atg.service.harrykart.java.rest.utility.CommonConstants.*;
+
+@Slf4j
 @Service
 public class HarryKartServiceImpl implements HarryKartService {
 
-    private static final int LAP_LENGTH = 1000;
-    private static final int MEDAL_FINISHERS = 3;
+    @Autowired
+    private XmlConverter xmlConverter;
 
     @Override
     public HarryResponse getResponse(String xmlStr) {
 
-        JAXBElement<HarryKartType> xmlAsJava = transformXmlToJAXBElement(xmlStr);
+        JAXBElement<HarryKartType> xmlAsJava = xmlConverter.transformXmlToJAXBElement(xmlStr);
 
         var harryKartType = xmlAsJava.getValue();
 
@@ -80,30 +83,26 @@ public class HarryKartServiceImpl implements HarryKartService {
                 .map(x -> x.getValue())
                 .collect(Collectors.toList());
 
-        Double lapSpeed = participantType.getBaseSpeed().doubleValue();
+        Double lapSpeed = getLapSpeed(participantType.getBaseSpeed().doubleValue(), DOUBLE_ZERO);
         Double totalTime = LAP_LENGTH / lapSpeed;
 
         for (int k = 0; k < bumpUps.size(); k++) {
-            lapSpeed += bumpUps.get(k).doubleValue();
+            lapSpeed = getLapSpeed(lapSpeed, bumpUps.get(k).doubleValue());;
             totalTime += LAP_LENGTH / lapSpeed;
         }
 
         return totalTime;
     }
 
-    @SuppressWarnings("unchecked")
-    private JAXBElement<HarryKartType> transformXmlToJAXBElement(String xmlString) {
+    private Double getLapSpeed(Double currentSpeed, Double bumpUpSpeed) {
 
-        try {
+        Double lapSpeed = currentSpeed + bumpUpSpeed;
 
-            JAXBContext jc = JAXBContext.newInstance("se.atg.service.harrykart.java.generated");
-            Unmarshaller um = jc.createUnmarshaller();
-
-            return (JAXBElement<HarryKartType>) um.unmarshal(new StringReader(xmlString));
-
-        } catch (JAXBException e) {
-            e.printStackTrace();
-            throw new RuntimeException("");
+        if (lapSpeed <= 0) {
+            log.error(ZonedDateTime.now() + ". getLapSpeed exception lapSpeed <= 0.");
+            throw new RuntimeException("getLapSpeed lapSpeed <= 0.");
         }
+
+        return lapSpeed;
     }
 }

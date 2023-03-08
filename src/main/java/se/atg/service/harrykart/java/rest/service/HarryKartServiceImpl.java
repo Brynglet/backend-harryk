@@ -42,7 +42,6 @@ public class HarryKartServiceImpl implements HarryKartService {
     private HarryResponse convertToResponse(List<HorseDTO> horseDTOs) {
 
         AtomicInteger pos = new AtomicInteger();
-        pos.set(0);
 
         List<PositionHorse> responseInfo = horseDTOs.stream()
                 .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)

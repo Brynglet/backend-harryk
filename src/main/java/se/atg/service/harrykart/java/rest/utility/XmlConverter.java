@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 public class XmlConverter {
 
     @SuppressWarnings("unchecked")
-    public JAXBElement<HarryKartType> transformXmlToJAXBElement(String xmlString) {
+    public static JAXBElement<HarryKartType> transformXmlToJAXBElement(String xmlString) {
 
         try {
 

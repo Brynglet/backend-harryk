@@ -2,9 +2,9 @@ package se.atg.service.harrykart.java.rest.service;
 
 import jakarta.xml.bind.JAXBElement;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.atg.service.harrykart.java.generated.HarryKartType;
+import se.atg.service.harrykart.java.generated.LaneType;
 import se.atg.service.harrykart.java.generated.ParticipantType;
 import se.atg.service.harrykart.java.rest.pojo.HarryResponse;
 import se.atg.service.harrykart.java.rest.pojo.HorseDTO;
@@ -23,13 +23,10 @@ import static se.atg.service.harrykart.java.rest.utility.CommonConstants.*;
 @Service
 public class HarryKartServiceImpl implements HarryKartService {
 
-    @Autowired
-    private XmlConverter xmlConverter;
-
     @Override
     public HarryResponse getResponse(String xmlStr) {
 
-        JAXBElement<HarryKartType> xmlAsJava = xmlConverter.transformXmlToJAXBElement(xmlStr);
+        JAXBElement<HarryKartType> xmlAsJava = XmlConverter.transformXmlToJAXBElement(xmlStr);
 
         var harryKartType = xmlAsJava.getValue();
 
@@ -80,14 +77,14 @@ public class HarryKartServiceImpl implements HarryKartService {
                 .sorted((o1, o2) -> o1.getNumber().intValue() > o2.getNumber().intValue() ? 1 : -1)
                 .flatMap(x -> x.getLane().stream())
                 .filter(x -> laneNr == x.getNumber().intValue())
-                .map(x -> x.getValue())
+                .map(LaneType::getValue)
                 .collect(Collectors.toList());
 
-        Double lapSpeed = getLapSpeed(participantType.getBaseSpeed().doubleValue(), DOUBLE_ZERO);
-        Double totalTime = LAP_LENGTH / lapSpeed;
+        double lapSpeed = getLapSpeed(participantType.getBaseSpeed().doubleValue(), DOUBLE_ZERO);
+        double totalTime = LAP_LENGTH / lapSpeed;
 
         for (int k = 0; k < bumpUps.size(); k++) {
-            lapSpeed = getLapSpeed(lapSpeed, bumpUps.get(k).doubleValue());;
+            lapSpeed = getLapSpeed(lapSpeed, bumpUps.get(k).doubleValue());
             totalTime += LAP_LENGTH / lapSpeed;
         }
 
@@ -96,7 +93,7 @@ public class HarryKartServiceImpl implements HarryKartService {
 
     private Double getLapSpeed(Double currentSpeed, Double bumpUpSpeed) {
 
-        Double lapSpeed = currentSpeed + bumpUpSpeed;
+        double lapSpeed = currentSpeed + bumpUpSpeed;
 
         if (lapSpeed <= 0) {
             log.error(ZonedDateTime.now() + ". getLapSpeed exception lapSpeed <= 0.");

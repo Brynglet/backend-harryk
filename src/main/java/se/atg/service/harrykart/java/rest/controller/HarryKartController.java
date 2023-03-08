@@ -14,8 +14,12 @@ import se.atg.service.harrykart.java.rest.service.HarryKartService;
 @RequestMapping("/java/api")
 public class HarryKartController {
 
+    private final HarryKartService harryKartService;
+
     @Autowired
-    private HarryKartService harryKartService;
+    public HarryKartController (HarryKartService harryKartService) {
+        this.harryKartService = harryKartService;
+    }
 
     @PostMapping(path = "/play", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MappingJacksonValue> playHarryKart(@RequestBody String xmlStr) {

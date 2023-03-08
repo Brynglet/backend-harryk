@@ -83,8 +83,8 @@ public class HarryKartServiceImpl implements HarryKartService {
         double lapSpeed = getLapSpeed(participantType.getBaseSpeed().doubleValue(), DOUBLE_ZERO);
         double totalTime = LAP_LENGTH / lapSpeed;
 
-        for (int k = 0; k < bumpUps.size(); k++) {
-            lapSpeed = getLapSpeed(lapSpeed, bumpUps.get(k).doubleValue());
+        for (BigInteger bumpUp : bumpUps) {
+            lapSpeed = getLapSpeed(lapSpeed, bumpUp.doubleValue());
             totalTime += LAP_LENGTH / lapSpeed;
         }
 

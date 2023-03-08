@@ -74,7 +74,7 @@ public class HarryKartServiceImpl implements HarryKartService {
         int laneNr = participantType.getLane().intValue();
 
         List<BigInteger> bumpUps = hkt.getPowerUps().getLoop().stream()
-                .sorted((o1, o2) -> o1.getNumber().intValue() > o2.getNumber().intValue() ? 1 : -1)
+                .sorted((x1, x2) -> x1.getNumber().intValue() > x2.getNumber().intValue() ? 1 : -1)
                 .flatMap(x -> x.getLane().stream())
                 .filter(x -> laneNr == x.getNumber().intValue())
                 .map(LaneType::getValue)

@@ -1,4 +1,4 @@
-package se.atg.service.harrykart.java.rest;
+package se.atg.service.harrykart.java.rest.service;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
@@ -7,6 +7,9 @@ import jakarta.xml.bind.Unmarshaller;
 import org.springframework.stereotype.Service;
 import se.atg.service.harrykart.java.generated.HarryKartType;
 import se.atg.service.harrykart.java.generated.ParticipantType;
+import se.atg.service.harrykart.java.rest.pojo.HarryResp;
+import se.atg.service.harrykart.java.rest.pojo.HorseDTO;
+import se.atg.service.harrykart.java.rest.pojo.PositionHorse;
 
 import java.io.StringReader;
 import java.math.BigInteger;
@@ -21,7 +24,7 @@ public class HarryKartServiceImpl implements HarryKartService {
     private static final int MEDAL_FINISHERS = 3;
 
     @Override
-    public HarryResp getInfo(String xmlStr) {
+    public HarryResp getResponse(String xmlStr) {
 
         JAXBElement<HarryKartType> xmlAsJava = transformXmlToJAXBElement(xmlStr);
 
@@ -41,17 +44,17 @@ public class HarryKartServiceImpl implements HarryKartService {
         AtomicInteger pos = new AtomicInteger();
         pos.set(0);
 
-        List<PositionHorse> positionHorses = horseDTOs.stream()
+        List<PositionHorse> responseInfo = horseDTOs.stream()
+                .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
                 .map(x -> PositionHorse.builder()
                             .horse(x.getHorseName())
                             .position(pos.incrementAndGet())
                             .totalTime(x.getTotalTime())
                             .build())
-                .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
                 .collect(Collectors.toList());
 
         return HarryResp.builder()
-                .ranking(positionHorses)
+                .ranking(responseInfo)
                 .build();
     }
 

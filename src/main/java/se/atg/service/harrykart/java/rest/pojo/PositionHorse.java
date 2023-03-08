@@ -1,4 +1,4 @@
-package se.atg.service.harrykart.java.rest;
+package se.atg.service.harrykart.java.rest.pojo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

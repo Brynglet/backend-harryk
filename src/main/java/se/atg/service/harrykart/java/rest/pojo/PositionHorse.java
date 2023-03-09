@@ -13,7 +13,7 @@ public class PositionHorse {
 
     private String horse;
 
-    @JsonIgnore
+    //@JsonIgnore
     /* For testing purposes */
     private Double totalTime;
 }

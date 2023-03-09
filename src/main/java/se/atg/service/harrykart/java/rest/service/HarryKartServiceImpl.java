@@ -38,24 +38,6 @@ public class HarryKartServiceImpl implements HarryKartService {
         return convertToResponse(horseDTOs);
     }
 
-    private HarryResponse convertToResponse(List<HorseDTO> horseDTOs) {
-
-        AtomicInteger pos = new AtomicInteger();
-
-        List<PositionHorse> responseInfo = horseDTOs.stream()
-                .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
-                .map(x -> PositionHorse.builder()
-                            .horse(x.getHorseName())
-                            .position(pos.incrementAndGet())
-                            .totalTime(x.getTotalTime())
-                            .build())
-                .collect(Collectors.toList());
-
-        return HarryResponse.builder()
-                .ranking(responseInfo)
-                .build();
-    }
-
     private HorseDTO getHorseDto(ParticipantType x, HarryKartType hkt) {
 
         Double totalTime = getTotalRaceTime(x, hkt);
@@ -99,5 +81,23 @@ public class HarryKartServiceImpl implements HarryKartService {
         }
 
         return lapSpeed;
+    }
+
+    private HarryResponse convertToResponse(List<HorseDTO> horseDTOs) {
+
+        AtomicInteger pos = new AtomicInteger();
+
+        List<PositionHorse> responseInfo = horseDTOs.stream()
+                .sorted((x1, x2) -> x1.getTotalTime() > x2.getTotalTime() ? 1 : -1)
+                .map(x -> PositionHorse.builder()
+                        .horse(x.getHorseName())
+                        .position(pos.incrementAndGet())
+                        .totalTime(x.getTotalTime())
+                        .build())
+                .collect(Collectors.toList());
+
+        return HarryResponse.builder()
+                .ranking(responseInfo)
+                .build();
     }
 }

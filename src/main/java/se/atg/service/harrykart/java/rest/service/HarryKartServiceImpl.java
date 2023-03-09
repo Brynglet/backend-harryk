@@ -1,6 +1,5 @@
 package se.atg.service.harrykart.java.rest.service;
 
-import jakarta.xml.bind.JAXBElement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.atg.service.harrykart.java.generated.HarryKartType;
@@ -26,9 +25,9 @@ public class HarryKartServiceImpl implements HarryKartService {
     @Override
     public HarryResponse getResponse(String xmlStr) {
 
-        JAXBElement<HarryKartType> xmlAsJava = XmlConverter.transformXmlToJAXBElement(xmlStr);
+        XmlConverter xmlConverter = new XmlConverter();
 
-        var harryKartType = xmlAsJava.getValue();
+        var harryKartType = xmlConverter.transformXmlToJava(xmlStr);
 
         List<HorseDTO> horseDTOs = harryKartType.getStartList().getParticipant().stream()
                 .map(x -> getHorseDto(x, harryKartType))

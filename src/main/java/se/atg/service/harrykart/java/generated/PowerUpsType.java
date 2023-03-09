@@ -65,4 +65,8 @@ public class PowerUpsType {
         return this.loop;
     }
 
+    public void setLoop(List<LoopType> loop) {
+        this.loop = loop;
+    }
+
 }

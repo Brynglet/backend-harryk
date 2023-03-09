@@ -68,6 +68,10 @@ public class LoopType {
         return this.lane;
     }
 
+    public void setLane(List<LaneType> lane) {
+        this.lane = lane;
+    }
+
     /**
      * Gets the value of the number property.
      * 

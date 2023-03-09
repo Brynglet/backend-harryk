@@ -67,4 +67,7 @@ public class StartListType {
         return this.participant;
     }
 
+    public void setParticipant(List<ParticipantType> participant) {
+        this.participant = participant;
+    }
 }

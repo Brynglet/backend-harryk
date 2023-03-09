@@ -1,7 +1,6 @@
 package se.atg.service.harrykart.java.rest.pojo;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
